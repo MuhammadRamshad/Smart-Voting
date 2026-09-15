@@ -1,0 +1,18 @@
+﻿# Dependencies
+node_modules/
+
+# Hardhat compilation output
+artifacts/
+cache/
+typechain-types/
+
+# Environment variables — NEVER commit secrets
+.env
+
+# Coverage reports
+coverage/
+coverage.json
+
+# OS artefacts
+.DS_Store
+Thumbs.db
