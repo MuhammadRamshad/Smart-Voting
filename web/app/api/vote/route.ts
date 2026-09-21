@@ -42,9 +42,10 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: 'Invalid or expired auth session.' }, { status: 401 });
   }
 
-  if (!tokenPayload.otpVerified || !tokenPayload.faceVerified) {
+  const isIdentityVerified = tokenPayload.otpVerified || tokenPayload.nfcVerified;
+  if (!isIdentityVerified || !tokenPayload.faceVerified) {
     return NextResponse.json(
-      { error: 'MFA incomplete: Both OTP and biometric liveness must pass before voting.' },
+      { error: 'MFA incomplete: Both NFC Smart Card and biometric face match must pass before voting.' },
       { status: 403 }
     );
   }

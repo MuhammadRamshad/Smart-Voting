@@ -152,7 +152,7 @@ export default function AdminDashboardPage() {
         <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg">
           <div className="flex items-center justify-between text-slate-400 mb-2">
             <span className="text-xs font-semibold uppercase tracking-wider">Total On-Chain Votes</span>
-            <Vote className="w-5 h-5 text-blue-400" />
+            <Vote className="w-5 h-5 text-neutral-400" />
           </div>
           <div className="text-3xl font-extrabold text-slate-100 font-mono">
             {stats.totalVotes}
@@ -201,7 +201,7 @@ export default function AdminDashboardPage() {
         {/* Candidate breakdown (1 col) */}
         <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg space-y-4">
           <h2 className="text-sm font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-2">
-            <Vote className="w-4 h-4 text-blue-400" /> Candidate Tally (On-Chain)
+            <Vote className="w-4 h-4 text-neutral-400" /> Candidate Tally (On-Chain)
           </h2>
 
           <div className="space-y-3 pt-1">
@@ -221,7 +221,7 @@ export default function AdminDashboardPage() {
                     </div>
                     <div className="w-full h-2 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
                       <div
-                        className="h-full bg-blue-500 rounded-full transition-all duration-500"
+                        className="h-full bg-white rounded-full transition-all duration-500"
                         style={{ width: `${pct}%` }}
                       />
                     </div>
@@ -240,7 +240,7 @@ export default function AdminDashboardPage() {
             </h2>
             <Link
               href="/admin/audit"
-              className="text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1"
+              className="text-xs text-neutral-400 hover:text-neutral-300 flex items-center gap-1"
             >
               Full Explorer <ChevronRight className="w-3.5 h-3.5" />
             </Link>
@@ -287,7 +287,7 @@ export default function AdminDashboardPage() {
                     <span className="text-slate-200">{evt.message}</span>
                   </div>
                   {evt.txHash && (
-                    <span className="font-mono text-[11px] text-blue-400">
+                    <span className="font-mono text-[11px] text-neutral-400">
                       {evt.txHash.slice(0, 8)}...
                     </span>
                   )}

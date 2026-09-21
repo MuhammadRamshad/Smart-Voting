@@ -1,7 +1,7 @@
 ﻿'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Plus, Check, X, Calendar, Vote, ShieldCheck, RefreshCw } from 'lucide-react';
+import { Plus, X, Vote } from 'lucide-react';
 import { Modal } from '@/components/ui/Modal';
 import toast from 'react-hot-toast';
 
@@ -19,9 +19,8 @@ export default function ElectionsManagementPage() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // Form state
   const [title, setTitle] = useState('');
-  const [candidates, setCandidates] = useState(['Alice Johnson', 'Bob Smith', 'Carol Williams']);
+  const [candidates, setCandidates] = useState(['Aromal', 'Irshad', 'Manikandan']);
   const [newCandidate, setNewCandidate] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
@@ -72,18 +71,13 @@ export default function ElectionsManagementPage() {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          title,
-          candidates,
-        }),
+        body: JSON.stringify({ title, candidates }),
       });
 
       const data = await resp.json();
-      if (!resp.ok) {
-        throw new Error(data.error || 'Failed to create election');
-      }
+      if (!resp.ok) throw new Error(data.error || 'Failed to create election');
 
-      toast.success('Election created & opened on blockchain!');
+      toast.success('Election created and opened!');
       setShowCreateModal(false);
       setTitle('');
       fetchElections();
@@ -107,11 +101,9 @@ export default function ElectionsManagementPage() {
       });
 
       const data = await resp.json();
-      if (!resp.ok) {
-        throw new Error(data.error || 'Action failed');
-      }
+      if (!resp.ok) throw new Error(data.error || 'Action failed');
 
-      toast.success(`Election state updated to ${action}`);
+      toast.success(`Election status: ${action}`);
       fetchElections();
     } catch (err: any) {
       toast.error(err.message || 'State transition failed');
@@ -122,94 +114,94 @@ export default function ElectionsManagementPage() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-slate-100 flex items-center gap-2">
-            <Vote className="w-6 h-6 text-blue-400" /> Election Lifecycle Management
+          <h1 className="text-lg font-bold text-white flex items-center gap-2 font-mono uppercase tracking-wider">
+            <Vote className="w-5 h-5" /> Elections
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
-            Deploy and transition decentralized ballot states via Election.sol smart contracts
+          <p className="text-xs text-neutral-500 font-mono mt-1">
+            Manage election lifecycle — create, open, close, and audit elections on-chain.
           </p>
         </div>
 
         <button
           onClick={() => setShowCreateModal(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-semibold transition shadow-lg shadow-blue-600/20"
+          className="flex items-center gap-2 px-4 py-2 bg-white hover:bg-neutral-200 text-black rounded text-xs font-mono transition"
         >
-          <Plus className="w-4 h-4" /> Deploy New Election
+          <Plus className="w-4 h-4" /> New Election
         </button>
       </div>
 
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-lg">
+      <div className="border border-neutral-800 bg-neutral-950 rounded overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs text-slate-300">
-            <thead className="bg-slate-950/80 text-slate-400 uppercase font-semibold border-b border-slate-800">
+          <table className="w-full text-left text-xs text-neutral-300">
+            <thead className="bg-black text-neutral-500 uppercase font-mono border-b border-neutral-800 text-[10px]">
               <tr>
-                <th className="px-4 py-3.5">Election ID / Title</th>
-                <th className="px-4 py-3.5">Candidates</th>
-                <th className="px-4 py-3.5">Status</th>
-                <th className="px-4 py-3.5">Time Window</th>
-                <th className="px-4 py-3.5 text-right">Contract Action</th>
+                <th className="px-4 py-3">Title / ID</th>
+                <th className="px-4 py-3">Candidates</th>
+                <th className="px-4 py-3">Status</th>
+                <th className="px-4 py-3">Period</th>
+                <th className="px-4 py-3 text-right">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60 font-medium">
+            <tbody className="divide-y divide-neutral-900 font-mono">
               {elections.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="py-8 text-center text-slate-500">
-                    No elections found in database. Create one above to initialize.
+                  <td colSpan={5} className="py-10 text-center text-neutral-600">
+                    No elections found. Create one to get started.
                   </td>
                 </tr>
               ) : (
                 elections.map((elec) => (
-                  <tr key={elec.electionId} className="hover:bg-slate-800/40 transition">
-                    <td className="px-4 py-3.5">
-                      <div className="font-semibold text-slate-100">{elec.title}</div>
-                      <div className="font-mono text-[11px] text-slate-500 truncate max-w-xs">
+                  <tr key={elec.electionId} className="hover:bg-neutral-900/50 transition">
+                    <td className="px-4 py-3">
+                      <div className="font-semibold text-white text-xs">{elec.title}</div>
+                      <div className="font-mono text-[10px] text-neutral-600 truncate max-w-xs mt-0.5">
                         {elec.electionId}
                       </div>
                     </td>
-                    <td className="px-4 py-3.5">
-                      <span className="text-slate-300">{elec.candidates?.length || 0} registered</span>
+                    <td className="px-4 py-3 text-neutral-400">
+                      {elec.candidates?.length || 0} candidates
                     </td>
-                    <td className="px-4 py-3.5">
+                    <td className="px-4 py-3">
                       <span
-                        className={`inline-block px-2.5 py-0.5 rounded text-[11px] font-semibold uppercase ${
+                        className={`inline-block px-2 py-0.5 rounded text-[10px] border ${
                           elec.status === 'Open'
-                            ? 'bg-emerald-950/60 text-emerald-400 border border-emerald-800/50'
+                            ? 'border-white text-white'
                             : elec.status === 'Closed'
-                            ? 'bg-slate-800 text-slate-400 border border-slate-700'
+                            ? 'border-neutral-700 text-neutral-500'
                             : elec.status === 'Audited'
-                            ? 'bg-purple-950/60 text-purple-400 border border-purple-800/50'
-                            : 'bg-blue-950/60 text-blue-400 border border-blue-800/50'
+                            ? 'border-neutral-600 text-neutral-400'
+                            : 'border-neutral-800 text-neutral-600'
                         }`}
                       >
                         {elec.status}
                       </span>
                     </td>
-                    <td className="px-4 py-3.5 text-[11px] text-slate-400">
+                    <td className="px-4 py-3 text-[10px] text-neutral-500">
                       {new Date(elec.startTime).toLocaleDateString()} – {new Date(elec.endTime).toLocaleDateString()}
                     </td>
-                    <td className="px-4 py-3.5 text-right space-x-2">
+                    <td className="px-4 py-3 text-right space-x-2">
                       {elec.status === 'Scheduled' && (
                         <button
                           onClick={() => handleAction(elec.electionId, 'open')}
-                          className="px-2.5 py-1 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/40 rounded-lg text-xs"
+                          className="px-2.5 py-1 border border-neutral-700 hover:border-white text-white rounded text-[10px] font-mono transition"
                         >
-                          Open Election
+                          Open
                         </button>
                       )}
                       {elec.status === 'Open' && (
                         <button
                           onClick={() => handleAction(elec.electionId, 'close')}
-                          className="px-2.5 py-1 bg-amber-600/20 hover:bg-amber-600/30 text-amber-300 border border-amber-500/40 rounded-lg text-xs"
+                          className="px-2.5 py-1 border border-neutral-700 hover:border-white text-white rounded text-[10px] font-mono transition"
                         >
-                          Close Ballot
+                          Close
                         </button>
                       )}
                       {elec.status === 'Closed' && (
                         <button
                           onClick={() => handleAction(elec.electionId, 'audit')}
-                          className="px-2.5 py-1 bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 border border-purple-500/40 rounded-lg text-xs"
+                          className="px-2.5 py-1 border border-neutral-700 hover:border-white text-white rounded text-[10px] font-mono transition"
                         >
-                          Mark Audited
+                          Audit
                         </button>
                       )}
                     </td>
@@ -221,35 +213,34 @@ export default function ElectionsManagementPage() {
         </div>
       </div>
 
-      {/* Modal to Create Election */}
-      <Modal isOpen={showCreateModal} onClose={() => setShowCreateModal(false)} title="Deploy Decentralized Election">
+      <Modal isOpen={showCreateModal} onClose={() => setShowCreateModal(false)} title="Create New Election">
         <form onSubmit={handleCreateElection} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold uppercase text-slate-400 mb-1">
+            <label className="block text-[10px] font-mono uppercase text-neutral-500 mb-1">
               Election Title
             </label>
             <input
               type="text"
               required
-              placeholder="e.g., Faculty Representative Election 2024"
+              placeholder="e.g., General Election 2026"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 text-xs focus:outline-none focus:border-blue-500"
+              className="w-full px-3 py-2 bg-black border border-neutral-800 rounded text-white text-xs focus:outline-none focus:border-neutral-600 font-mono placeholder-neutral-700"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase text-slate-400 mb-1">
-              Candidates List
+            <label className="block text-[10px] font-mono uppercase text-neutral-500 mb-1">
+              Candidates
             </label>
             <div className="space-y-2 mb-2">
               {candidates.map((c, i) => (
-                <div key={i} className="flex items-center justify-between p-2 bg-slate-950 border border-slate-800 rounded-lg text-xs">
-                  <span className="text-slate-200">#{i + 1} {c}</span>
+                <div key={i} className="flex items-center justify-between p-2 border border-neutral-800 bg-black rounded text-xs">
+                  <span className="text-neutral-300 font-mono">#{i + 1} {c}</span>
                   <button
                     type="button"
                     onClick={() => handleRemoveCandidate(i)}
-                    className="text-red-400 hover:text-red-300 p-1"
+                    className="text-neutral-600 hover:text-white p-1 transition"
                   >
                     <X className="w-3.5 h-3.5" />
                   </button>
@@ -263,12 +254,12 @@ export default function ElectionsManagementPage() {
                 placeholder="Candidate name..."
                 value={newCandidate}
                 onChange={(e) => setNewCandidate(e.target.value)}
-                className="flex-1 px-3 py-1.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 text-xs focus:outline-none focus:border-blue-500"
+                className="flex-1 px-3 py-1.5 bg-black border border-neutral-800 rounded text-white text-xs focus:outline-none focus:border-neutral-600 font-mono placeholder-neutral-700"
               />
               <button
                 type="button"
                 onClick={handleAddCandidate}
-                className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-semibold"
+                className="px-3 py-1.5 border border-neutral-700 hover:border-white text-white rounded text-xs font-mono transition"
               >
                 Add
               </button>
@@ -278,9 +269,9 @@ export default function ElectionsManagementPage() {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl text-xs transition shadow-lg shadow-blue-600/20 disabled:opacity-50"
+            className="w-full py-2.5 bg-white hover:bg-neutral-200 text-black font-mono text-xs rounded transition disabled:opacity-40"
           >
-            {submitting ? 'Broadcasting to Chain...' : 'Deploy and Open Election'}
+            {submitting ? 'Creating...' : 'Create & Open Election'}
           </button>
         </form>
       </Modal>

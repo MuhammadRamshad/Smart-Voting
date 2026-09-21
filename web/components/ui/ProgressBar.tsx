@@ -1,4 +1,4 @@
-import { clsx } from "clsx";
+﻿import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { Check } from "lucide-react";
 
@@ -21,10 +21,10 @@ export interface ProgressBarProps {
 
 export function ProgressBar({ steps, labels, currentStep, className }: ProgressBarProps) {
   const resolvedSteps: ProgressStep[] = steps || (labels ? labels.map((l) => ({ label: l })) : [
-    { label: 'MFA OTP' },
-    { label: 'Face Liveness' },
-    { label: 'Cast Ballot' },
-    { label: 'Confirmed' },
+    { label: 'Login' },
+    { label: 'Face' },
+    { label: 'Ballot' },
+    { label: 'Done' },
   ]);
   const zeroIndexedStep = currentStep > 0 && currentStep <= resolvedSteps.length ? currentStep - 1 : currentStep;
 
@@ -34,70 +34,61 @@ export function ProgressBar({ steps, labels, currentStep, className }: ProgressB
         {resolvedSteps.map((step, idx) => {
           const isCompleted = idx < zeroIndexedStep;
           const isActive = idx === zeroIndexedStep;
-          const isUpcoming = idx > zeroIndexedStep;
           const isLast = idx === resolvedSteps.length - 1;
 
           return (
             <li key={step.label} className="flex flex-1 flex-col items-center last:flex-none">
-              {/* Step dot + connector line */}
               <div className="flex items-center w-full">
-                {/* Left connector */}
                 {idx > 0 && (
                   <div
                     className={cn(
-                      "h-0.5 flex-1 transition-all duration-300",
-                      isCompleted ? "bg-blue-500" : "bg-slate-700"
+                      "h-px flex-1 transition-all duration-300",
+                      isCompleted ? "bg-white" : "bg-neutral-800"
                     )}
                   />
                 )}
 
-                {/* Step indicator */}
                 <div
                   className={cn(
-                    "relative flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border-2 transition-all duration-300",
+                    "relative flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full border transition-all duration-300",
                     isCompleted
-                      ? "bg-blue-600 border-blue-500 text-white"
+                      ? "bg-white border-white text-black"
                       : isActive
-                      ? "bg-slate-900 border-blue-500 text-blue-400 ring-2 ring-blue-500/30"
-                      : "bg-slate-900 border-slate-600 text-slate-500"
+                      ? "bg-black border-white text-white"
+                      : "bg-black border-neutral-700 text-neutral-600"
                   )}
                   aria-current={isActive ? "step" : undefined}
                 >
                   {isCompleted ? (
-                    <Check className="h-4 w-4 text-white" />
+                    <Check className="h-3.5 w-3.5 text-black" />
                   ) : (
-                    <span className="text-xs font-bold">{idx + 1}</span>
+                    <span className="text-[10px] font-bold font-mono">{idx + 1}</span>
                   )}
                 </div>
 
-                {/* Right connector */}
                 {!isLast && (
                   <div
                     className={cn(
-                      "h-0.5 flex-1 transition-all duration-300",
-                      isCompleted ? "bg-blue-500" : "bg-slate-700"
+                      "h-px flex-1 transition-all duration-300",
+                      isCompleted ? "bg-white" : "bg-neutral-800"
                     )}
                   />
                 )}
               </div>
 
-              {/* Step label */}
               <div className="mt-2 text-center">
                 <p
                   className={cn(
-                    "text-xs font-medium transition-colors duration-200",
+                    "text-[10px] font-mono transition-colors duration-200 uppercase tracking-wider",
                     isActive
-                      ? "text-blue-300"
+                      ? "text-white"
                       : isCompleted
-                      ? "text-slate-300"
-                      : "text-slate-500"
+                      ? "text-neutral-400"
+                      : "text-neutral-700"
                   )}
                 >
                   {step.label}
                 </p>
-                {step.description && isActive && (
-                  <p className="mt-0.5 text-xs text-slate-500">{step.description}</p>
-                )}
               </div>
             </li>
           );
@@ -112,7 +103,7 @@ export function SimpleProgressBar({
   value,
   max = 100,
   label,
-  colorClass = "bg-blue-500",
+  colorClass = "bg-white",
   className,
 }: {
   value: number;
@@ -125,12 +116,12 @@ export function SimpleProgressBar({
   return (
     <div className={cn("space-y-1", className)}>
       {label && (
-        <div className="flex items-center justify-between text-xs">
-          <span className="text-slate-400">{label}</span>
-          <span className="font-medium text-slate-300">{pct}%</span>
+        <div className="flex items-center justify-between text-xs font-mono">
+          <span className="text-neutral-500">{label}</span>
+          <span className="font-medium text-neutral-300">{pct}%</span>
         </div>
       )}
-      <div className="h-2 w-full rounded-full bg-slate-700/60 overflow-hidden">
+      <div className="h-1.5 w-full rounded-full bg-neutral-900 overflow-hidden">
         <div
           className={cn("h-full rounded-full transition-all duration-500 ease-out", colorClass)}
           style={{ width: `${pct}%` }}

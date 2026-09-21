@@ -1,4 +1,4 @@
-import type { Metadata, Viewport } from "next";
+﻿import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import { SyncStatusBar } from "@/components/SyncStatusBar";
@@ -11,9 +11,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Smart Voting System | Blockchain-Powered",
-  description:
-    "Secure blockchain-based voting with AI fraud detection. Academic prototype.",
+  title: "Smart Voting System",
+  description: "Secure blockchain-based voting with AI fraud detection.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
@@ -27,7 +26,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#1e40af",
+  themeColor: "#000000",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
@@ -45,7 +44,7 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.json" />
         <meta name="mobile-web-app-capable" content="yes" />
       </head>
-      <body className="min-h-screen bg-slate-950 text-slate-100 font-sans antialiased">
+      <body className="min-h-screen bg-black text-white font-sans antialiased selection:bg-white selection:text-black">
         <div className="relative min-h-screen">{children}</div>
         <SyncStatusBar />
         <Toaster
@@ -53,16 +52,18 @@ export default function RootLayout({
           toastOptions={{
             duration: 4000,
             style: {
-              background: "#1e293b",
-              color: "#f1f5f9",
-              border: "1px solid #334155",
-              borderRadius: "0.5rem",
+              background: "#111111",
+              color: "#ffffff",
+              border: "1px solid #222222",
+              borderRadius: "0.375rem",
+              fontFamily: "monospace",
+              fontSize: "12px",
             },
             success: {
-              iconTheme: { primary: "#16a34a", secondary: "#f1f5f9" },
+              iconTheme: { primary: "#ffffff", secondary: "#000000" },
             },
             error: {
-              iconTheme: { primary: "#dc2626", secondary: "#f1f5f9" },
+              iconTheme: { primary: "#ff4444", secondary: "#000000" },
             },
           }}
         />

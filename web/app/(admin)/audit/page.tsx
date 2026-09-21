@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useEffect, useState } from 'react';
 import { Search, ExternalLink, Copy, Check, ShieldCheck, Download, RefreshCw } from 'lucide-react';
@@ -110,7 +110,7 @@ export default function BlockchainAuditTrailPage() {
         <button
           onClick={fetchAudit}
           disabled={loading}
-          className="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-semibold"
+          className="px-3 py-1.5 bg-white hover:bg-neutral-200 text-white rounded-lg text-xs font-semibold"
         >
           {loading ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : 'Query'}
         </button>
@@ -139,7 +139,7 @@ export default function BlockchainAuditTrailPage() {
               ) : (
                 events.map((evt, idx) => (
                   <tr key={idx} className="hover:bg-slate-800/40 transition">
-                    <td className="px-4 py-3 font-mono text-blue-400">#{evt.blockNumber}</td>
+                    <td className="px-4 py-3 font-mono text-neutral-400">#{evt.blockNumber}</td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">
                         <span className="font-mono text-[11px] text-slate-300">

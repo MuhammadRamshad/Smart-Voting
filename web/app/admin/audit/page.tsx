@@ -1,7 +1,7 @@
 ﻿'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Search, ExternalLink, Copy, Check, ShieldCheck, Download, RefreshCw } from 'lucide-react';
+import { Search, Copy, Check, ShieldCheck, Download, RefreshCw } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 interface AuditEvent {
@@ -47,7 +47,7 @@ export default function BlockchainAuditTrailPage() {
   const handleCopy = (hash: string) => {
     navigator.clipboard.writeText(hash);
     setCopiedHash(hash);
-    toast.success('Copied transaction hash');
+    toast.success('Copied');
     setTimeout(() => setCopiedHash(null), 2000);
   };
 
@@ -56,7 +56,6 @@ export default function BlockchainAuditTrailPage() {
       toast.error('No events to export');
       return;
     }
-
     const headers = ['BlockNumber', 'TxHash', 'CandidateId', 'MaskedCommitment', 'Timestamp'];
     const rows = events.map((e) => [
       e.blockNumber,
@@ -65,7 +64,6 @@ export default function BlockchainAuditTrailPage() {
       e.maskedCommitment,
       new Date(e.timestamp * 1000).toISOString(),
     ]);
-
     const csvContent = [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
@@ -81,89 +79,86 @@ export default function BlockchainAuditTrailPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-100 flex items-center gap-2">
-            <ShieldCheck className="w-6 h-6 text-emerald-400" /> Decentralized Audit Trail Explorer
+          <h1 className="text-lg font-bold text-white flex items-center gap-2 font-mono uppercase tracking-wider">
+            <ShieldCheck className="w-5 h-5" /> Audit Trail
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
-            Query immutable VoteCast events on-chain. Voter commitments are privacy-masked.
+          <p className="text-xs text-neutral-500 font-mono mt-1">
+            Query immutable VoteCast events. Voter commitments are privacy-masked.
           </p>
         </div>
-
         <button
           onClick={handleExportCsv}
-          className="flex items-center gap-1.5 px-3.5 py-2 bg-slate-900 border border-slate-800 hover:bg-slate-800 rounded-xl text-xs text-slate-300 transition"
+          className="flex items-center gap-1.5 px-3 py-1.5 border border-neutral-800 hover:border-neutral-600 rounded text-xs text-neutral-400 hover:text-white font-mono transition"
         >
-          <Download className="w-3.5 h-3.5" /> Export Audit CSV
+          <Download className="w-3.5 h-3.5" /> Export CSV
         </button>
       </div>
 
-      {/* Filter bar */}
-      <div className="p-4 bg-slate-900 border border-slate-800 rounded-2xl flex items-center gap-3">
-        <Search className="w-4 h-4 text-slate-500 shrink-0" />
+      <div className="p-3 border border-neutral-800 bg-neutral-950 rounded flex items-center gap-3">
+        <Search className="w-4 h-4 text-neutral-600 shrink-0" />
         <input
           type="text"
           value={electionId}
           onChange={(e) => setElectionId(e.target.value)}
-          placeholder="Filter by Election ID (bytes32 hex)..."
-          className="flex-1 bg-transparent border-none text-xs text-slate-200 focus:outline-none font-mono"
+          placeholder="Election ID (bytes32 hex)..."
+          className="flex-1 bg-transparent border-none text-xs text-white focus:outline-none font-mono placeholder-neutral-700"
         />
         <button
           onClick={fetchAudit}
           disabled={loading}
-          className="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-semibold"
+          className="px-3 py-1.5 bg-white hover:bg-neutral-200 text-black rounded text-xs font-mono transition disabled:opacity-40"
         >
           {loading ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : 'Query'}
         </button>
       </div>
 
-      {/* Explorer Table */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-lg">
+      <div className="border border-neutral-800 bg-neutral-950 rounded overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs text-slate-300">
-            <thead className="bg-slate-950/80 text-slate-400 uppercase font-semibold border-b border-slate-800">
+          <table className="w-full text-left text-xs text-neutral-300">
+            <thead className="bg-black text-neutral-500 uppercase font-mono border-b border-neutral-800 text-[10px]">
               <tr>
-                <th className="px-4 py-3.5">Block #</th>
-                <th className="px-4 py-3.5">Transaction Hash</th>
-                <th className="px-4 py-3.5">Candidate ID</th>
-                <th className="px-4 py-3.5">Voter Commitment (Masked)</th>
-                <th className="px-4 py-3.5">Mined Timestamp</th>
+                <th className="px-4 py-3">Block</th>
+                <th className="px-4 py-3">Transaction Hash</th>
+                <th className="px-4 py-3">Candidate</th>
+                <th className="px-4 py-3">Voter Hash (Masked)</th>
+                <th className="px-4 py-3">Timestamp</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60 font-medium">
+            <tbody className="divide-y divide-neutral-900 font-mono">
               {events.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="py-8 text-center text-slate-500">
+                  <td colSpan={5} className="py-10 text-center text-neutral-600">
                     No on-chain events found for this election.
                   </td>
                 </tr>
               ) : (
                 events.map((evt, idx) => (
-                  <tr key={idx} className="hover:bg-slate-800/40 transition">
-                    <td className="px-4 py-3 font-mono text-blue-400">#{evt.blockNumber}</td>
+                  <tr key={idx} className="hover:bg-neutral-900/50 transition">
+                    <td className="px-4 py-3 font-mono text-white text-[11px]">#{evt.blockNumber}</td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">
-                        <span className="font-mono text-[11px] text-slate-300">
+                        <span className="font-mono text-[11px] text-neutral-400">
                           {evt.txHash.slice(0, 10)}...{evt.txHash.slice(-8)}
                         </span>
                         <button
                           onClick={() => handleCopy(evt.txHash)}
-                          className="p-1 hover:text-white text-slate-500 transition"
+                          className="p-1 hover:text-white text-neutral-600 transition"
                         >
                           {copiedHash === evt.txHash ? (
-                            <Check className="w-3.5 h-3.5 text-emerald-400" />
+                            <Check className="w-3.5 h-3.5 text-white" />
                           ) : (
                             <Copy className="w-3.5 h-3.5" />
                           )}
                         </button>
                       </div>
                     </td>
-                    <td className="px-4 py-3 font-semibold text-slate-200">
+                    <td className="px-4 py-3 text-white text-[11px]">
                       Candidate #{evt.candidateId}
                     </td>
-                    <td className="px-4 py-3 font-mono text-slate-400 text-[11px]">
+                    <td className="px-4 py-3 font-mono text-neutral-500 text-[10px]">
                       {evt.maskedCommitment}
                     </td>
-                    <td className="px-4 py-3 text-slate-400 text-[11px]">
+                    <td className="px-4 py-3 text-neutral-500 text-[10px]">
                       {new Date(evt.timestamp * 1000).toLocaleString()}
                     </td>
                   </tr>

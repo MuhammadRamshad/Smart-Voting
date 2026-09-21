@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -83,10 +83,14 @@ export default function BallotPage() {
         throw new Error(data.error || 'Failed to submit vote');
       }
 
+      // Store confirmation data for the confirmation page
+      const candidateName = candidates.find(c => c.id === selectedCandidate)?.name || 'Unknown';
+      sessionStorage.setItem('last_txHash', data.txHash || '0xMockHash');
+      sessionStorage.setItem('last_blockNumber', String(data.blockNumber || ''));
+      sessionStorage.setItem('last_candidate', candidateName);
+
       toast.success('Ballot recorded on blockchain!');
-      localStorage.setItem('last_tx_hash', data.txHash || '0xLocalSimulation');
-      localStorage.setItem('voted_candidate_id', String(selectedCandidate));
-      router.push('/confirmed');
+      router.push('/confirmation');
     } catch (err: any) {
       toast.error(err.message || 'Error submitting ballot');
     } finally {

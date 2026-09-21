@@ -7,6 +7,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import List, Dict, Any, Optional
+import math
 
 from models.risk_scorer import RiskScorer
 from models.aggregate_audit import AggregateAuditor
@@ -56,6 +57,16 @@ class RiskResponse(BaseModel):
     contributing_factors: List[Dict[str, Any]]
     confidence_caveat: str
 
+class FaceVerifyRequest(BaseModel):
+    stored_descriptor: List[float]
+    live_descriptor: List[float]
+    threshold: float = 0.60
+
+class FaceVerifyResponse(BaseModel):
+    match: bool
+    score: float
+    threshold: float
+
 class TurnoutGroup(BaseModel):
     group: str
     eligible: int
@@ -89,6 +100,27 @@ def score_vote(features: VoteFeatures):
     
     result = risk_scorer.score(features.dict())
     return result
+
+@app.post("/face/verify", response_model=FaceVerifyResponse)
+def verify_face(req: FaceVerifyRequest):
+    a = req.stored_descriptor
+    b = req.live_descriptor
+    if not a or not b or len(a) != len(b):
+        return {"match": False, "score": 0.0, "threshold": req.threshold}
+    
+    dot = sum(x * y for x, y in zip(a, b))
+    mag_a = math.sqrt(sum(x * x for x in a))
+    mag_b = math.sqrt(sum(y * y for y in b))
+    if mag_a == 0 or mag_b == 0:
+        return {"match": False, "score": 0.0, "threshold": req.threshold}
+    
+    score = dot / (mag_a * mag_b)
+    score_rounded = round(float(score), 4)
+    return {
+        "match": score_rounded >= req.threshold,
+        "score": score_rounded,
+        "threshold": req.threshold
+    }
 
 @app.post("/audit/aggregate", response_model=AggregateAuditResponse)
 def audit_aggregate(req: AggregateAuditRequest):

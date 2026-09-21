@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useEffect, useState } from 'react';
 import { AlertTriangle, Check, X, ShieldAlert, FileText, Info, RefreshCw, Search } from 'lucide-react';
@@ -110,7 +110,7 @@ export default function FlaggedReviewPage() {
               onClick={() => setFilter(tab)}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold capitalize transition ${
                 filter === tab
-                  ? 'bg-blue-600 text-white shadow-sm'
+                  ? 'bg-white text-white shadow-sm'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
@@ -176,7 +176,7 @@ export default function FlaggedReviewPage() {
                             ? 'bg-amber-950/60 text-amber-400 border border-amber-800/50'
                             : item.reviewStatus === 'cleared'
                             ? 'bg-emerald-950/60 text-emerald-400 border border-emerald-800/50'
-                            : 'bg-blue-950/60 text-blue-400 border border-blue-800/50'
+                            : 'bg-neutral-900 text-neutral-400 border border-neutral-800'
                         }`}
                       >
                         {item.reviewStatus}
@@ -229,8 +229,8 @@ export default function FlaggedReviewPage() {
             </div>
 
             {/* Confidence caveat requirement */}
-            <div className="p-3 bg-blue-950/40 border border-blue-800/50 rounded-xl text-xs text-blue-300 flex items-start gap-2">
-              <Info className="w-4 h-4 text-blue-400 shrink-0 mt-0.5" />
+            <div className="p-3 bg-neutral-950 border border-neutral-800 rounded-xl text-xs text-neutral-300 flex items-start gap-2">
+              <Info className="w-4 h-4 text-neutral-400 shrink-0 mt-0.5" />
               <p>{selectedFlag.confidenceCaveat}</p>
             </div>
 
@@ -245,7 +245,7 @@ export default function FlaggedReviewPage() {
                   onChange={(e) => setNote(e.target.value)}
                   placeholder="Record review observations..."
                   rows={2}
-                  className="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-slate-200 focus:outline-none focus:border-blue-500"
+                  className="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-slate-200 focus:outline-none focus:border-white"
                 />
               </div>
 
@@ -266,7 +266,7 @@ export default function FlaggedReviewPage() {
                   onClick={() => setActionStatus('reviewed')}
                   className={`flex-1 py-2 text-xs font-semibold rounded-xl border transition ${
                     actionStatus === 'reviewed'
-                      ? 'bg-blue-600 text-white border-blue-500'
+                      ? 'bg-white text-white border-white'
                       : 'bg-slate-800 text-slate-300 border-slate-700'
                   }`}
                 >
@@ -289,7 +289,7 @@ export default function FlaggedReviewPage() {
                 type="button"
                 disabled={saving}
                 onClick={handleSaveReview}
-                className="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl text-xs transition shadow-lg shadow-blue-600/20 disabled:opacity-50"
+                className="w-full py-2.5 bg-white hover:bg-neutral-200 text-white font-semibold rounded-xl text-xs transition shadow-lg  disabled:opacity-50"
               >
                 {saving ? 'Saving Annotation...' : 'Submit Human Review Annotation'}
               </button>

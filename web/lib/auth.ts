@@ -8,7 +8,9 @@ export interface VoterTokenPayload {
   voterHashId: string;
   electionId: string;
   otpVerified: boolean;
+  nfcVerified?: boolean;
   faceVerified: boolean;
+  voterName?: string;
   iat?: number;
   exp?: number;
 }

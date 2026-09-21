@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -10,12 +10,14 @@ import {
   LogOut,
   Menu,
   X,
+  UserPlus,
 } from "lucide-react";
 import { useState } from "react";
 import clsx from "clsx";
 
 const NAV_LINKS = [
   { href: "/admin/dashboard", label: "Overview", icon: LayoutDashboard },
+  { href: "/admin/voters", label: "Voter Roster & NFC", icon: UserPlus },
   { href: "/admin/elections", label: "Elections & Flow", icon: Vote },
   { href: "/admin/flagged", label: "Flagged Attempts", icon: AlertTriangle },
   { href: "/admin/audit", label: "Audit Ledger", icon: Search },

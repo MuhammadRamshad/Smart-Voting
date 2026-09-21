@@ -1,10 +1,8 @@
-'use client';
+﻿'use client';
 
 import React, { useEffect, useState, Suspense } from 'react';
-import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { CheckCircle2, Copy, ArrowLeft, ShieldCheck, Clock, ExternalLink, Hash, Check } from 'lucide-react';
-import { ProgressBar } from '@/components/ui/ProgressBar';
+import { CheckCircle2, Copy, ArrowLeft, Clock, Check } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 function ConfirmationContent() {
@@ -27,72 +25,69 @@ function ConfirmationContent() {
     if (txHash) {
       navigator.clipboard.writeText(txHash);
       setCopied(true);
-      toast.success('Transaction Hash copied to clipboard');
+      toast.success('Transaction hash copied');
       setTimeout(() => setCopied(false), 2500);
     }
   };
 
   return (
-    <div className="w-full max-w-lg mx-auto p-4">
-      <div className="text-center mb-6">
-        <h1 className="text-2xl font-bold text-slate-100">
-          {isOffline ? 'Vote Buffered in Offline Queue' : 'Ballot Cast Successfully!'}
+    <div className="w-full max-w-lg mx-auto p-4 font-sans text-white selection:bg-white selection:text-black">
+      <div className="text-center mb-8">
+        <div className="w-10 h-10 bg-white text-black font-bold rounded-lg flex items-center justify-center mx-auto mb-4 text-sm font-mono">
+          V
+        </div>
+        <h1 className="text-xl font-bold tracking-tight uppercase font-mono">
+          {isOffline ? 'Vote Buffered' : 'Vote Confirmed'}
         </h1>
-        <p className="text-sm text-slate-400 mt-1">
-          {isOffline
-            ? 'Cryptographic commitment saved locally with idempotency key'
-            : 'Permanently sealed on the distributed blockchain ledger'}
-        </p>
+        <p className="text-xs text-neutral-500 font-mono mt-1">Step 4 of 4 &bull; Complete</p>
       </div>
 
-      <ProgressBar currentStep={4} totalSteps={4} labels={['MFA OTP', 'Face Liveness', 'Cast Ballot', 'Confirmed']} />
-
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl mt-6 text-center">
+      <div className="border border-neutral-800 bg-neutral-950 p-6 rounded-lg shadow-2xl text-center">
         {isOffline ? (
-          <div className="w-20 h-20 bg-amber-500/10 border border-amber-500/30 rounded-full flex items-center justify-center mx-auto mb-4 text-amber-400 shadow-lg shadow-amber-500/10">
-            <Clock className="w-10 h-10 animate-pulse" />
+          <div className="w-16 h-16 border border-neutral-700 rounded-full flex items-center justify-center mx-auto mb-4 text-neutral-400">
+            <Clock className="w-8 h-8 animate-pulse" />
           </div>
         ) : (
-          <div className="w-20 h-20 bg-emerald-500/10 border border-emerald-500/30 rounded-full flex items-center justify-center mx-auto mb-4 text-emerald-400 shadow-lg shadow-emerald-500/10">
-            <CheckCircle2 className="w-10 h-10" />
+          <div className="w-16 h-16 border border-white rounded-full flex items-center justify-center mx-auto mb-4 text-white">
+            <CheckCircle2 className="w-8 h-8" />
           </div>
         )}
 
-        <h2 className="text-xl font-bold text-slate-100 mb-1">
-          {isOffline ? 'Queued for Autonomous Sync' : 'Vote Confirmed On-Chain'}
+        <h2 className="text-lg font-bold font-mono uppercase mb-1">
+          {isOffline ? 'Queued for Sync' : 'Ballot Sealed On-Chain'}
         </h2>
-        <p className="text-xs text-slate-400 max-w-sm mx-auto">
+        <p className="text-xs text-neutral-500 font-mono max-w-sm mx-auto mt-1">
           {isOffline
-            ? 'Your device is disconnected. The ballot payload is stored in client IndexedDB and will execute with zero double-count risk as soon as connectivity resumes.'
-            : 'A decentralized smart contract event (VoteCast) was emitted with zero personally identifiable data.'}
+            ? 'Your ballot is stored locally. It will sync when connectivity is restored.'
+            : 'A smart contract event was emitted. No personal data is recorded on-chain.'}
         </p>
 
         {!isOffline && (
-          <div className="bg-slate-950 border border-slate-800 rounded-xl p-4 my-6 text-left space-y-3">
+          <div className="border border-neutral-800 bg-black rounded p-4 my-6 text-left space-y-3">
             <div>
-              <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-1">
+              <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider block mb-1">
                 Transaction Hash
               </span>
-              <div className="flex items-center justify-between gap-2 bg-slate-900 px-3 py-2 rounded-lg border border-slate-800">
-                <span className="font-mono text-xs text-blue-300 truncate">{txHash}</span>
+              <div className="flex items-center justify-between gap-2 bg-neutral-950 px-3 py-2 rounded border border-neutral-800">
+                <span className="font-mono text-xs text-neutral-300 truncate">{txHash}</span>
                 <button
                   onClick={handleCopy}
-                  className="p-1 hover:text-white text-slate-400 transition"
+                  className="p-1 hover:text-white text-neutral-500 transition"
                   title="Copy Hash"
                 >
-                  {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
+                  {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                 </button>
               </div>
             </div>
 
-            <div className="flex justify-between items-center text-xs pt-1 border-t border-slate-800/80">
-              <span className="text-slate-400">Block Number:</span>
-              <span className="font-mono text-slate-200 font-semibold">#{blockNumber}</span>
+            <div className="flex justify-between items-center text-xs pt-2 border-t border-neutral-800">
+              <span className="text-neutral-500 font-mono">Block</span>
+              <span className="font-mono text-white font-semibold">#{blockNumber}</span>
             </div>
 
             <div className="flex justify-between items-center text-xs">
-              <span className="text-slate-400">Candidate Recorded:</span>
-              <span className="font-semibold text-blue-400">{candidate}</span>
+              <span className="text-neutral-500 font-mono">Candidate</span>
+              <span className="font-mono text-white font-semibold">{candidate}</span>
             </div>
           </div>
         )}
@@ -100,19 +95,10 @@ function ConfirmationContent() {
         <div className="pt-4 flex flex-col gap-3">
           <button
             onClick={() => router.push('/')}
-            className="w-full py-3 px-4 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold rounded-xl transition text-sm flex items-center justify-center gap-2"
+            className="w-full py-2.5 px-4 border border-neutral-700 hover:border-white text-white font-mono uppercase text-xs rounded transition flex items-center justify-center gap-2"
           >
-            <ArrowLeft className="w-4 h-4" /> Return to Welcome Screen
+            <ArrowLeft className="w-3.5 h-3.5" /> Return to Home
           </button>
-
-          {!isOffline && (
-            <button
-              onClick={() => router.push('/admin/audit')}
-              className="w-full py-2.5 px-4 bg-blue-950/40 hover:bg-blue-900/40 text-blue-300 border border-blue-800/50 font-semibold rounded-xl transition text-xs flex items-center justify-center gap-1.5"
-            >
-              Verify in Public Audit Trail <ExternalLink className="w-3.5 h-3.5" />
-            </button>
-          )}
         </div>
       </div>
     </div>
@@ -121,7 +107,7 @@ function ConfirmationContent() {
 
 export default function ConfirmationPage() {
   return (
-    <Suspense fallback={<div className="p-8 text-center text-slate-400">Loading confirmation...</div>}>
+    <Suspense fallback={<div className="p-8 text-center text-neutral-500 font-mono text-xs">Loading...</div>}>
       <ConfirmationContent />
     </Suspense>
   );
