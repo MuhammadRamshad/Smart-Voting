@@ -1,12 +1,9 @@
-import mongoose from "mongoose";
+﻿import mongoose from "mongoose";
 
-const getMongoUri = () => process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/smart-voting";
+const getMongoUri = () =>
+  process.env.MONGODB_URI ||
+  "mongodb+srv://muhammadramshad07_db_user:1PORYTcCb8cRCZEs@thor.u4tzudv.mongodb.net/smart-voting?retryWrites=true&w=majority&appName=Thor";
 
-/**
- * Global is used here to maintain a cached connection across hot reloads
- * in development. This prevents connections from growing exponentially
- * during API Route usage.
- */
 interface MongooseCache {
   conn: typeof mongoose | null;
   promise: Promise<typeof mongoose> | null;
@@ -29,14 +26,15 @@ export async function connectDB(): Promise<typeof mongoose> {
   if (!cached.promise) {
     const opts: mongoose.ConnectOptions = {
       bufferCommands: false,
-      serverSelectionTimeoutMS: 1500,
-      connectTimeoutMS: 1500,
+      serverSelectionTimeoutMS: 5000,
+      connectTimeoutMS: 5000,
     };
     cached.promise = mongoose.connect(getMongoUri(), opts);
   }
 
   try {
     cached.conn = await cached.promise;
+    console.log("[MongoDB] Connected successfully to Atlas database.");
   } catch (e) {
     cached.promise = null;
     throw e;
