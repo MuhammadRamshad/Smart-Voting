@@ -1,5 +1,9 @@
-﻿require("@nomicfoundation/hardhat-toolbox");
-require("dotenv").config();
+﻿const path = require("path");
+require("@nomicfoundation/hardhat-toolbox");
+
+// Load root .env
+require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
+require("dotenv").config(); // fallback to local if present
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
@@ -10,28 +14,26 @@ module.exports = {
         enabled: true,
         runs: 200,
       },
-      // Enable via-IR pipeline to handle large/complex contracts and
-      // avoid "stack too deep" compilation errors.
       viaIR: true,
     },
   },
 
   networks: {
-    // Built-in in-process Hardhat network (used by default for tests)
     hardhat: {
       chainId: 31337,
     },
 
-    // Local node started with `npx hardhat node`
     localhost: {
-      url: "http://127.0.0.1:8545",
+      url: process.env.HARDHAT_RPC_URL || "http://127.0.0.1:8545",
       chainId: 31337,
-      // Use the first Hardhat test account when no PRIVATE_KEY is set
-      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
+      accounts: process.env.PRIVATE_KEY
+        ? [process.env.PRIVATE_KEY]
+        : process.env.DEPLOYER_PRIVATE_KEY
+        ? [process.env.DEPLOYER_PRIVATE_KEY]
+        : [],
     },
   },
 
-  // Path configuration — keep defaults so artifacts live under ./artifacts
   paths: {
     sources: "./contracts",
     tests: "./test",
@@ -39,7 +41,6 @@ module.exports = {
     artifacts: "./artifacts",
   },
 
-  // Mocha settings for longer-running integration tests
   mocha: {
     timeout: 60_000,
   },

@@ -1,40 +1,47 @@
-﻿# Node.js
-node_modules/
-npm-debug.log*
+﻿# =============================================================================
+# SMART VOTING SYSTEM - UNIFIED .GITIGNORE
+# =============================================================================
 
-# Next.js
+# Node.js dependencies & logs
+node_modules/
+**/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# Next.js build output
+.next/
 web/.next/
+out/
 web/out/
 
-# Python
-ai-service/__pycache__/
-ai-service/*.pyc
-ai-service/.venv/
+# Python virtual environment & cache
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*$py.class
 ai-service/venv/
+ai-service/.venv/
+venv/
+.venv/
 ai-service/saved_models/*.pkl
 
-# Hardhat
+# Hardhat & Solidity compilation artifacts
 contracts/cache/
 contracts/artifacts/
 contracts/typechain-types/
 
-# Environment files
+# Environment configurations (keep secrets out of git)
 # .env
 # .env.local
-# .env.production
-# contracts/.env
-# web/.env
-# ai-service/.env
+# .env.*.local
+# *.env
 
-# Logs
-*.log
-logs/
-
-# OS
+# Operating System & Editors
 .DS_Store
 Thumbs.db
-
-# IDE
 .vscode/
 .idea/
 *.swp
+*.swo
